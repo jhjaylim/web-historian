@@ -20,14 +20,33 @@ exports.handleRequest = function (req, res) {
     }
 
   });
-  console.log(req.method);
+  // console.log(Object.keys(req));
+  //   // console.log('method: ', req.method);
+  //   // console.log('hearders: ', req.headers);
+  //   // console.log('url: ', req.url);
+  // console.log(req); 
    // two cases
     // check if it is valid url. 
       // if valid
 
+  if (req.method === 'POST') {
+    var body = '';
+    req.on('data', function(chunk) {
+      body += chunk;
+    })
+    .on('end', function(data) {
+      body = body.split('=');
+      body = body[1];
+      console.log(archive.isUrlInList(body));
 
+    });
+    
+
+  }
+  
   // requests will have url
 
     // upon getting url, this request handler checks if the url has been archived yet
 
 };
+
