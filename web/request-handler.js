@@ -37,8 +37,49 @@ exports.handleRequest = function (req, res) {
     .on('end', function(data) {
       body = body.split('=');
       body = body[1];
-      console.log(archive.isUrlInList(body));
 
+      var isUrlInList;
+      var isArchived;
+      archive.addUrlToList(body);
+      archive.isUrlInList(body, (isIn) => {
+
+        // call readListOfUrls
+        
+        if (isIn) {
+          // check if archived
+            //if so respond with assets
+          // else
+            // respond with loading.html
+            
+  
+          
+        } else { // means entry does not exist in sites.txt
+  
+          // call archive.download (inside, it send request to worker to download.)
+          // then call addToUrlList;
+          // respond with loading.html
+        }
+      });
+      
+      // if we want to call for isArchvied, we need to make sure isUrlInList is defined;
+      
+
+
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
     });
     
 

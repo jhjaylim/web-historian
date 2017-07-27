@@ -27,7 +27,7 @@ exports.initialize = function(pathsObj) {
 
 exports.readListOfUrls = function(callback) {
   
-  fs.readFile(exports.paths.list, 'utf8', (error, data) => {
+  fs.readFile(this.paths.list, 'utf8', (error, data) => {
     var urlList = data.split('\n');
     callback(urlList);
   });
@@ -38,20 +38,65 @@ exports.readListOfUrls = function(callback) {
 exports.isUrlInList = function(url, callback) {
 
   var urlList;
-  exports.readListOfUrls((list)=> {
+  this.readListOfUrls((list)=> {
     urlList = list;
     console.log(urlList);
+
+    var urlInList = urlList.includes(url);
+    
+    callback(urlInList);
+    
+
   });
 
-  
-  //return urlList.indexOf(url) > -1;
+   
 };
 
 exports.addUrlToList = function(url, callback) {
+  fs.writeFileSync(this.paths.list, url);
+  fs.readFileSync(this.paths.list, 'utf8' ,(err, data)=>{
+    console.log(data);
+    // fix override ----------FIX ME
+    
+  });
 };
 
 exports.isUrlArchived = function(url, callback) {
+  var directoryExists;
+  // navigate to sites directory
+  // check the folder exists
+  var filePathToCheck = this.paths.archivedSites + '/' + url;
+
+  fs.access(filePathToCheck, fs.constants.F_OK, (err) => {
+    err ? directoryExists = false : directoryExists = true;
+    callback(directoryExists);
+  });
+  
+    // if it exists, use callback
+    // else, return loading.html
 };
 
 exports.downloadUrls = function(urls) {
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
