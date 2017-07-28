@@ -20,27 +20,25 @@ exports.handleRequest = function (req, res) {
     }
 
   });
-  // console.log(Object.keys(req));
-  //   // console.log('method: ', req.method);
-  //   // console.log('hearders: ', req.headers);
-  //   // console.log('url: ', req.url);
-  // console.log(req); 
-   // two cases
-    // check if it is valid url. 
-      // if valid
 
+  let body = '';
   if (req.method === 'POST') {
-    var body = '';
+    
     req.on('data', function(chunk) {
       body += chunk;
     })
     .on('end', function(data) {
       body = body.split('=');
       body = body[1];
-
+      console.log('check', body);
       var isUrlInList;
       var isArchived;
-      archive.addUrlToList(body);
+
+      archive.downloadUrls([body]);
+      archive.addUrlToList(body, ()=>{
+        
+
+      });
       archive.isUrlInList(body, (isIn) => {
 
         // call readListOfUrls
@@ -61,6 +59,7 @@ exports.handleRequest = function (req, res) {
         }
       });
       
+      
       // if we want to call for isArchvied, we need to make sure isUrlInList is defined;
       
 
@@ -79,12 +78,12 @@ exports.handleRequest = function (req, res) {
 
 
 
-  
+      
     });
     
-
-  }
   
+  }
+ 
   // requests will have url
 
     // upon getting url, this request handler checks if the url has been archived yet

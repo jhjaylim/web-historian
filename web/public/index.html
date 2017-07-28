@@ -2,12 +2,18 @@
 <html>
 <head>
   <link rel="stylesheet" type="text/css" href="styles.css" />
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 
 </head>
 <body>
   Enter a URL here:
-  <form method="POST" >
-    <input type="input" name="url"></input>
+  <form id="form" method="POST" autocomplete="off">
+    <input type="input" name="url" ></input>
   </form>
+
+<script>
+  console.log($('#form'));
+
+</script>
 </body>
 </html>

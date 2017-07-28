@@ -1,4 +1,5 @@
 var fs = require('fs');
+var http = require('http');
 var path = require('path');
 var _ = require('underscore');
 
@@ -53,12 +54,18 @@ exports.isUrlInList = function(url, callback) {
 };
 
 exports.addUrlToList = function(url, callback) {
-  fs.writeFileSync(this.paths.list, url);
-  fs.readFileSync(this.paths.list, 'utf8' ,(err, data)=>{
-    console.log(data);
-    // fix override ----------FIX ME
+  // console.log(typeof url);
+  // fs.appendFileSync(this.paths.list, `${url}`, 'utf8', (err, data) => {
     
-  });
+    
+  //   console.log(data);
+    
+  // });
+  // fs.readFileSync(this.paths.list, 'utf8', (err, data) => {
+  //   console.log(data);
+    
+    
+  // });
 };
 
 exports.isUrlArchived = function(url, callback) {
@@ -77,7 +84,38 @@ exports.isUrlArchived = function(url, callback) {
 };
 
 exports.downloadUrls = function(urls) {
+
+  // POST request for worker function
+  urls.forEach((url) => {
+    var filePath = this.paths.archivedSites + '/' + url + '.html';
+    
+    var file = fs.createWriteStream(filePath); //dest is going be archive/sites/url
+    var request = http.get("http://www.google.com/", (response) => {
+      response.pipe(file);
+      file.on('finish', () => {
+        file.close();  // close() is async, call cb after close completes.
+      });
+    }).on('error', (err) => { // Handle errors
+      fs.unlink(filePath); // Delete the file async. (But we don't check the result)
+      // if () {
+      //   cb(err.message);
+      // }
+    });
+
+  });  
+  
 };
+
+
+
+
+
+
+
+
+
+
+
 
 
 
