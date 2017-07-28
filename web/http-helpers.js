@@ -16,6 +16,9 @@ exports.serveAssets = function(res, asset, callback) {
   // css, or anything that doesn't change often.)
 
   // give response with archived files
+
+  res.writeHead(200, {'Content-Type': 'text/html'});
+  res.end(asset);
 };
 
 

@@ -54,18 +54,16 @@ exports.isUrlInList = function(url, callback) {
 };
 
 exports.addUrlToList = function(url, callback) {
-  // console.log(typeof url);
-  // fs.appendFileSync(this.paths.list, `${url}`, 'utf8', (err, data) => {
+  
+  fs.appendFile(this.paths.list, `${url}`, 'utf8', (err, data) => {
+    if (!err) {
+      callback(data);
+
+    }
+
     
-    
-  //   console.log(data);
-    
-  // });
-  // fs.readFileSync(this.paths.list, 'utf8', (err, data) => {
-  //   console.log(data);
-    
-    
-  // });
+  });
+  
 };
 
 exports.isUrlArchived = function(url, callback) {
@@ -88,44 +86,37 @@ exports.downloadUrls = function(urls) {
   // POST request for worker function
   urls.forEach((url) => {
     var filePath = this.paths.archivedSites + '/' + url + '.html';
-    
-    var file = fs.createWriteStream(filePath); //dest is going be archive/sites/url
-    var request = http.get("http://www.google.com/", (response) => {
-      response.pipe(file);
-      file.on('finish', () => {
-        file.close();  // close() is async, call cb after close completes.
-      });
-    }).on('error', (err) => { // Handle errors
-      fs.unlink(filePath); // Delete the file async. (But we don't check the result)
-      // if () {
-      //   cb(err.message);
-      // }
-    });
+    if ( url.includes('http')) {
+      if (url.includes('https')) {
+        var start = url.indexOf('https');
+        var end = start + 4;
+        url = url.substring(0, start) + 'http' + url.substring(end + 1);
+  
+      }
+      
+    } 
 
+    try {
+      var file = fs.createWriteStream(filePath); //dest is going be archive/sites/url
+      var request = http.get(url, (response) => {
+        response.pipe(file);
+        file.on('finish', () => {
+          file.close();  // close() is async, call cb after close completes.
+        });
+      }).on('error', (err) => { // Handle errors
+        fs.unlink(filePath); // Delete the file async. (But we don't check the result)
+
+      });
+
+    } catch (err) {
+
+      console.log('Error: ', err);
+
+    }
+    
   });  
   
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
